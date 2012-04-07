@@ -1,0 +1,44 @@
+diff -uNr a/lib/logstash/outputs/amqp.rb b/lib/logstash/outputs/amqp.rb
+--- a/lib/logstash/outputs/amqp.rb	2012-01-31 14:22:04.000000000 -0800
++++ b/lib/logstash/outputs/amqp.rb	2012-04-05 18:29:14.626000025 -0700
+@@ -54,6 +54,9 @@
+   # Validate SSL certificate
+   config :verify_ssl, :validate => :boolean, :default => false
+ 
++  # AMQP spec
++  config :spec, :validate => :string, :default => "09"
++
+   public
+   def register
+     require "bunny" # rubygem 'bunny'
+@@ -69,6 +72,7 @@
+       :host => @host,
+       :port => @port,
+       :logging => @debug,
++      :spec => @spec,
+     }
+     amqpsettings[:user] = @user if @user
+     amqpsettings[:pass] = @password.value if @password
+diff -uNr a/lib/logstash/outputs/elasticsearch_river.rb b/lib/logstash/outputs/elasticsearch_river.rb
+--- a/lib/logstash/outputs/elasticsearch_river.rb	2012-01-31 14:22:04.000000000 -0800
++++ b/lib/logstash/outputs/elasticsearch_river.rb	2012-04-05 18:27:06.914999873 -0700
+@@ -99,7 +99,6 @@
+       "user" => [@user],
+       "password" => [@password],
+       "exchange_type" => ["direct"],
+-      "queue_name" => [@queue],
+       "name" => [@exchange],
+       "key" => [@key],
+       "vhost" => [@vhost],
+diff -uNr a/Makefile b/Makefile
+--- a/Makefile	2012-01-31 14:22:04.000000000 -0800
++++ b/Makefile	2012-04-05 18:29:06.555000064 -0700
+@@ -4,7 +4,7 @@
+ #   wget
+ #
+ JRUBY_VERSION=1.6.5
+-ELASTICSEARCH_VERSION=0.18.7
++ELASTICSEARCH_VERSION=0.19.2
+ VERSION=$(shell ruby -r./lib/logstash/version -e 'puts LOGSTASH_VERSION')
+ 
+ JRUBY_CMD=build/jruby/jruby-$(JRUBY_VERSION)/bin/jruby
