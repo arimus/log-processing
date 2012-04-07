@@ -1,25 +1,41 @@
 #!/bin/bash
 
-# this is straight from the elasticsearch rabbitmq river doc
-curl -XPUT 'localhost:9200/_river/my_river/_meta' -d '{
-    "type" : "rabbitmq",
-    "rabbitmq" : {
-        "host" : "localhost", 
-        "port" : 5672,
-        "user" : "guest",
-        "pass" : "guest",
-        "vhost" : "/",
-        "queue" : "elasticsearch",
-        "exchange" : "elasticsearch",
-        "routing_key" : "elasticsearch",
-        "exchange_type" : "direct",
-        "exchange_durable" : true,
-        "queue_durable" : true,
-        "queue_auto_delete" : false
-    },
-    "index" : {
-        "bulk_size" : 100,
-        "bulk_timeout" : "10ms",
-        "ordered" : false
-    }
-}'
+HOST=${1:-"localhost"}
+PORT=${2:-"9200"}
+
+echo "Using host=${HOST} port=${PORT}"
+
+# check to see if elasticsearch already has the river created
+RESULT=$(curl -XGET "${HOST}:${PORT}/_river/my_river/_meta" -s|grep elasticsearch|wc -l)
+if [ $RESULT == 3 ]; then
+    echo "Found existing elasticsearch river"
+    exit
+else
+    echo "Creating elasticsearch river"
+    exit
+
+  # create the river - this is straight from the elasticsearch rabbitmq river doc
+  curl -XPUT "${HOST}:${PORT}/_river/my_river/_meta" -d '{
+      "type" : "rabbitmq",
+      "rabbitmq" : {
+          "host" : "localhost", 
+          "port" : 5672,
+          "user" : "guest",
+          "pass" : "guest",
+          "vhost" : "/",
+          "queue" : "elasticsearch",
+          "exchange" : "elasticsearch",
+          "routing_key" : "elasticsearch",
+          "exchange_type" : "direct",
+          "exchange_durable" : true,
+          "queue_durable" : true,
+          "queue_auto_delete" : false
+      },
+      "index" : {
+          "bulk_size" : 100,
+          "bulk_timeout" : "10ms",
+          "ordered" : false
+      }
+  }'
+
+fi
