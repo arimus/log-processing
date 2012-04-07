@@ -14,6 +14,7 @@ License:        ASL 2.0
 URL:            https://github.com/elasticsearch/elasticsearch-river-rabbitmq
 
 Source0:        https://github.com/downloads/elasticsearch/elasticsearch-river-rabbitmq/elasticsearch-river-rabbitmq-%{version}.zip
+Source1:        create_elasticsearch_river.sh
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 
@@ -41,6 +42,7 @@ cd %{name}-%{version}
 %{__install} -D -m 755 plugins/river-rabbitmq/amqp-client-2.7.0.jar -t %{buildroot}/%{base_install_dir}/plugins/river-rabbitmq/
 %{__install} -D -m 755 plugins/river-rabbitmq/commons-cli-1.1.jar -t %{buildroot}/%{base_install_dir}/plugins/river-rabbitmq/
 %{__install} -D -m 755 plugins/river-rabbitmq/commons-io-1.2.jar -t %{buildroot}/%{base_install_dir}/plugins/river-rabbitmq/
+%{__install} -D -m 755 %{SOURCE1} -t %{buildroot}/%{base_install_dir}/plugins/river-rabbitmq/
 
 %files
 %defattr(-,root,root,-)
