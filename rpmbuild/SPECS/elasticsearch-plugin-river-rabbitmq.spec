@@ -6,7 +6,7 @@
 
 Name:           elasticsearch-plugin-river-rabbitmq
 Version:        1.1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        ElasticSearch plugin to hook into RabbitMQ
 
 Group:          System Environment/Daemons
@@ -50,6 +50,9 @@ cd %{name}-%{version}
 %{base_install_dir}/plugins/river-rabbitmq/*
 
 %changelog
+* Sun Apr  8 2012 David Castro arimus@gmail.com 1.1.0-2
+- Updated with create river script
+
 * Wed Mar 21 2012 Tavis Aitken tavisto@tavisto.net 1.1.0-1
 - Tweaked to make the package conform to fedora build specs
 
