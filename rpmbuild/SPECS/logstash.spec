@@ -72,11 +72,17 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 /usr/
-%config(noreplace) /etc/
 /var/
+/etc/rc.d/init.d/logstash
+%config(noreplace) /etc/logstash
+%config(noreplace) /etc/sysconfig
 
 %changelog
-* Thu Apr 05 2012 David Castro arimus@gmail.com 1.1.0
+* Thu Apr 11 2012 David Castro arimus@gmail.com 1.1.0-3
+- New init script that isn't busted
+- Sysconfig for settings and used by enhanced sbin
+
+* Thu Apr 05 2012 David Castro arimus@gmail.com 1.1.0-1
 - Initial spec that works for CentOS 5/6 and patches the issue with the
   elasticsearch_river
 - sets the default amqp version to 0.9
