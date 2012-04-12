@@ -1,68 +1,123 @@
 #! /bin/sh
 #
-# Logstash Start/Stop logstash
+# logstash-agent Startup script for the Logstash agent
 #
-# chkconfig: 345 99 99
-# description: Logstash
-# processname: logstash
+# chkconfig: - 70 45
+# description: The Logstash agent
+# processname: logstash-agent
+#
+### BEGIN INIT INFO
+# Provides: logstash
+# Required-Start: $local_fs $remote_fs
+# Required-Stop: $local_fs $remote_fs
+# Default-Start: 2 3 4 5
+# Default-Stop: S 0 1 6
+# Short-Description: Logstash
+# Description: Starts Logstash as the web component daemon.
+# Author: christian.paredes@sbri.org, hbarnes@pobox.com, arimus@gmail.com
+# License: Apache Version 2.0
+### END INIT INFO
 
-logstash_bin="java -cp /etc/logstash/:/usr/share/logstash/logstash-@@@version@@@-monolithic.jar logstash.runner"
-logstash_conf="/etc/logstash/logstash.conf"
-logstash_log="/var/log/logstash/logstash.log"
-NICE_LEVEL="-n 19"
+APP="agent"
 
-find_logstash_process () {
-    PIDTEMP=`ps ux | grep logstash | grep java | awk '{ print $2 }'`
-    # Pid not found
-    if [ "x$PIDTEMP" = "x" ]; then
-        PID=-1
-    else
-        PID=$PIDTEMP
-    fi
+# User to run logstash server as
+LOGSTASH_USER=""
+
+# Location of logstash files
+LOCATION="/usr/share/logstash"
+
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+DESC="Logstash ${APP} daemon"
+DAEMON="/usr/sbin/logstash"
+LOGFILE_OUT="/var/log/logstash/logstash-${APP}.log"
+LOGFILE_ERR="/var/log/logstash/logstash-${APP}.err"
+SCRIPTNAME="/etc/init.d/logstash-${APP}"
+PID="/var/run/logstash-${APP}.pid"
+LOCK="/var/lock/subsys/logstash-${APP}"
+
+# Exit if the package is not installed
+if [ ! -x "$DAEMON" ]; then
+{
+  echo "Couldn't find $DAEMON"
+  exit 99
+}
+fi
+
+# Define LSB functions.
+. /lib/lsb/init-functions
+
+#
+# Function that starts the daemon/service
+#
+do_start()
+{
+  # require daemonize utility
+  if [ ! -z "$LOGSTASH_USER" ]; then
+    daemonize -a -p $PID -l $LOCK -c $LOCATION -o $LOGFILE_OUT -e $LOGFILE_ERR -u $LOGSTASH_USER $DAEMON $ARGS || return 2
+  else
+    daemonize -a -p $PID -l $LOCK -c $LOCATION -o $LOGFILE_OUT -e $LOGFILE_ERR $DAEMON $ARGS || return 2
+  fi
 }
 
-start () {
-    LOG_DIR=`dirname ${logstash_log}`
-    if [ ! -d $LOG_DIR ]; then
-      echo "Log dir ${LOG_DIR} doesn't exist. Creating"
-      mkdir $LOG_DIR
-    fi
-    nohup nice ${NICE_LEVEL} ${logstash_bin} agent -f ${logstash_conf} -- >  ${logstash_log} &
+#
+# Function that stops the daemon/service
+#
+do_stop()
+{
+  # other if a failure occurred
+  killproc -p $PID
+  RETVAL="$?"
+  rm -f $PID
+  return "$RETVAL"
 }
 
-stop () {
-    find_logstash_process
-    if [ $PID -ne -1 ]; then
-        kill $PID
+case "$1" in
+  start)
+    do_start
+    if [ "$?" -gt 0 ];
+    then
+      log_failure_msg "${DESC} did not start"
+    else 
+      log_success_msg "${DESC} started"
     fi
-}
-
-case $1 in
-start)
-        start
-        ;;
-stop)
-        stop
-        exit 0
-        ;;
-reload)
-        stop
-        start
-        ;;
-restart)
-        stop
-        start
-        ;;
-status)
-        find_logstash_process
-    if [ $PID -gt 0 ]; then
-            exit 0
-        else
-            exit 1
-    fi 
-        ;;
-*)
-        echo $"Usage: $0 {start|stop|restart|reload|status}"
-        RETVAL=1
+    ;;
+  stop)
+    do_stop
+    if [ "$?" -gt 0 ];
+    then
+      log_failure_msg "${DESC} did not stop"
+    else 
+      log_success_msg "${DESC} stopped"
+    fi
+    ;;
+  restart)
+    do_stop
+    if [ "$?" -gt 0 ];
+    then
+      log_failure_msg "${DESC} did not stop"
+    else 
+      do_start
+      if [ "$?" -gt 0 ];
+      then
+        log_failure_msg "${DESC} did not start"
+      else 
+        log_success_msg "${DESC} restarted"
+      fi
+    fi
+    ;;
+  status)
+    pidofproc -p $PID
+    if [ "$?" -gt 0 ];
+    then
+      log_failure_msg "${DESC} is not running"
+    else 
+      log_success_msg "${DESC} is running"
+    fi
+    ;;
+  *)
+    echo "Usage: $SCRIPTNAME {start|stop|restart|status}" >&2
+    exit 3
+    ;;
 esac
+
 exit 0

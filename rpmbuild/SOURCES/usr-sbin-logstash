@@ -1,4 +1,11 @@
 #!/bin/bash
+
+. /etc/sysconfig/logstash
+
 cd /var/lib/logstash
 FULLNAME="$0"
-exec -a "${FULLNAME}" java -cp /etc/logstash/:/usr/share/logstash/logstash-@@@version@@@-monolithic.jar logstash.runner agent "$@" -- web --backend "elasticsearch:///?local"
+JAVA_ARGS="-Xms${LOGSTASH_MEM_MIN}M -Xmx${LOGSTASH_MEM_MAX}M"
+ARGS="-f ${LOGSTASH_CONFIG}"
+
+exec -a "${FULLNAME}" java $JAVA_ARGS -cp /etc/logstash/:/usr/share/logstash/logstash-${LOGSTASH_VERSION}-monolithic.jar logstash.runner agent $ARGS
+

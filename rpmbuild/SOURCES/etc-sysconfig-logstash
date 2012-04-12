@@ -1,0 +1,8 @@
+
+# Amount of memory for Java
+LOGSTASH_MEM_MIN=256
+LOGSTASH_MEM_MAX=256
+
+LOGSTASH_CONFIG="/etc/logstash/logstash.conf"
+
+LOGSTASH_VERSION="@@@version@@@"
