@@ -2,7 +2,7 @@
 
 Name:           logstash
 Version:        1.1.0
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:        logstash is a tool for managing events and logs.
 
 Group:          System Environment/Daemons
