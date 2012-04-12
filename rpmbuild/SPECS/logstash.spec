@@ -49,6 +49,7 @@ find . -type f -print0 | xargs -0 --no-run-if-empty -- sed -i -e 's/@@@version@@
 tar -zxvf %SOURCE6
 export ANT_HOME=`pwd`/apache-ant-1.7.1
 export PATH=$ANT_HOME/bin:$PATH
+chmod +x $ANT_HOME/bin/ant
 
 # logstash build
 tar -zxvf %SOURCE0
