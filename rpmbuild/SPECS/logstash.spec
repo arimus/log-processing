@@ -66,6 +66,7 @@ install -D -m 644 etc-logstash-log4j.properties     "${RPM_BUILD_ROOT}/etc/logst
 install -D -m 644 etc-sysconfig-logstash            "${RPM_BUILD_ROOT}/etc/sysconfig/logstash"
 install -D -m 755 usr-sbin-logstash                 "${RPM_BUILD_ROOT}/usr/sbin/logstash"
 mkdir -p "${RPM_BUILD_ROOT}/var/lib/logstash"
+mkdir -p "${RPM_BUILD_ROOT}/var/log/logstash"
 
 %clean
 rm -rf %{buildroot}
@@ -82,6 +83,7 @@ rm -rf %{buildroot}
 * Thu Apr 11 2012 David Castro arimus@gmail.com 1.1.0-3
 - New init script that isn't busted
 - Sysconfig for settings and used by enhanced sbin
+- Logging to /var/log/logstash
 
 * Thu Apr 05 2012 David Castro arimus@gmail.com 1.1.0-1
 - Initial spec that works for CentOS 5/6 and patches the issue with the
