@@ -107,6 +107,7 @@ case "$1" in
     ;;
   status)
     pidofproc -p $PID
+    RETVAL=$?
     if [ "$?" -gt 0 ];
     then
       log_failure_msg "${DESC} is not running"
