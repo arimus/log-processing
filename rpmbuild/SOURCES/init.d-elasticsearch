@@ -50,6 +50,7 @@ start() {
     echo -n $"Starting ${NAME}: "
     mkdir -p $ES_PATH_WORK
     ulimit -n $NFILES
+    ulimit -l unlimited
     daemon --pidfile=${PID_FILE} --user $ES_USER \
         ES_HOME=$ES_HOME \
         ES_INCLUDE=$ES_INCLUDE \
