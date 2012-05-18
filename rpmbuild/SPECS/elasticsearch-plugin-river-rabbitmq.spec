@@ -40,7 +40,7 @@ rm -rf $RPM_BUILD_ROOT
 cd %{name}-%{version}
 %{__mkdir} -p %{buildroot}/%{base_install_dir}/plugins
 %{__install} -D -m 755 plugins/river-rabbitmq/elasticsearch-river-rabbitmq-%{version}.jar %{buildroot}/%{base_install_dir}/plugins/river-rabbitmq/elasticsearch-river-rabbitmq.jar
-%{__install} -D -m 755 plugins/river-rabbitmq/amqp-client-2.7.0.jar -t %{buildroot}/%{base_install_dir}/plugins/river-rabbitmq/
+%{__install} -D -m 755 plugins/river-rabbitmq/amqp-client-2.8.1.jar -t %{buildroot}/%{base_install_dir}/plugins/river-rabbitmq/
 %{__install} -D -m 755 %{SOURCE1} -t %{buildroot}/%{base_install_dir}/plugins/river-rabbitmq/
 
 %files
