@@ -5,8 +5,8 @@
 %define __os_install_post %{nil}
 
 Name:           elasticsearch-plugin-river-rabbitmq
-Version:        1.1.0
-Release:        2%{?dist}
+Version:        1.2.0
+Release:        1%{?dist}
 Summary:        ElasticSearch plugin to hook into RabbitMQ
 
 Group:          System Environment/Daemons
@@ -19,6 +19,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 
 Requires:       elasticsearch >= 0.19
+Requires:       curl
 
 %description
 The RabbitMQ River plugin allows index
@@ -40,8 +41,6 @@ cd %{name}-%{version}
 %{__mkdir} -p %{buildroot}/%{base_install_dir}/plugins
 %{__install} -D -m 755 plugins/river-rabbitmq/elasticsearch-river-rabbitmq-%{version}.jar %{buildroot}/%{base_install_dir}/plugins/river-rabbitmq/elasticsearch-river-rabbitmq.jar
 %{__install} -D -m 755 plugins/river-rabbitmq/amqp-client-2.7.0.jar -t %{buildroot}/%{base_install_dir}/plugins/river-rabbitmq/
-%{__install} -D -m 755 plugins/river-rabbitmq/commons-cli-1.1.jar -t %{buildroot}/%{base_install_dir}/plugins/river-rabbitmq/
-%{__install} -D -m 755 plugins/river-rabbitmq/commons-io-1.2.jar -t %{buildroot}/%{base_install_dir}/plugins/river-rabbitmq/
 %{__install} -D -m 755 %{SOURCE1} -t %{buildroot}/%{base_install_dir}/plugins/river-rabbitmq/
 
 %files
@@ -50,6 +49,9 @@ cd %{name}-%{version}
 %{base_install_dir}/plugins/river-rabbitmq/*
 
 %changelog
+* Fri May 18 2012 David Castro arimus@gmail.com 1.2.0-1
+- Updated for 1.2.0
+
 * Sun Apr  8 2012 David Castro arimus@gmail.com 1.1.0-2
 - Updated with create river script
 
