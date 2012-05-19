@@ -18,6 +18,7 @@ Kibana is an open source (MIT License), browser based interface to Logstash and 
 
 %prep
 rm -rf "${RPM_BUILD_ROOT}"
+mkdir -p "${RPM_BUILD_ROOT}"
 
 %build
 # do nothing
