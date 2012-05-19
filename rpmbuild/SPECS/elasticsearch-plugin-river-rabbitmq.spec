@@ -14,7 +14,7 @@ License:        ASL 2.0
 URL:            https://github.com/elasticsearch/elasticsearch-river-rabbitmq
 
 Source0:        https://github.com/downloads/elasticsearch/elasticsearch-river-rabbitmq/elasticsearch-river-rabbitmq-%{version}.zip
-Source1:        create_elasticsearch_river.sh
+Source1:        create-elasticsearch-river
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 
